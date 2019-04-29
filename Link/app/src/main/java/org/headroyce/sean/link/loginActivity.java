@@ -27,6 +27,8 @@ public class loginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
 
+    private static String theUrl = "https://floating-beach-94674.herokuapp.com/";
+
     //O(1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,7 @@ public class loginActivity extends AppCompatActivity {
             HttpRequest request = new HttpRequest("GET", params);
 
 
-            String url = "https://floating-beach-94674.herokuapp.com/login/";
+            String url = theUrl + "login/";
             String result = "";
 
             try {
@@ -155,7 +157,7 @@ public class loginActivity extends AppCompatActivity {
             //create object to send request to server
             HttpRequest request = new HttpRequest("POST", params);
 
-            String url = "https://floating-beach-94674.herokuapp.com/newUser/";
+            String url = theUrl + "newUser/";
             String result = "";
 
             try {

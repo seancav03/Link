@@ -36,6 +36,8 @@ public class Friends extends AppCompatActivity {
 
     private LList<String> friends;
 
+    private static String theUrl = "https://floating-beach-94674.herokuapp.com/";
+
     //O(1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,7 @@ public class Friends extends AppCompatActivity {
         HttpRequest request = new HttpRequest("GET", params);
 
 
-        String url = "https://floating-beach-94674.herokuapp.com/getFriends/";
+        String url = theUrl + "getFriends/";
         String result = "";
 
         try {
@@ -160,7 +162,7 @@ public class Friends extends AppCompatActivity {
 
             HttpRequest request = new HttpRequest("GET", params);
 
-            String url = "https://floating-beach-94674.herokuapp.com/unfollow/";
+            String url = theUrl + "unfollow/";
             String result = "";
 
             try {
@@ -199,7 +201,7 @@ public class Friends extends AppCompatActivity {
                 HttpRequest request = new HttpRequest("GET", params);
 
 
-                String url = "https://floating-beach-94674.herokuapp.com/follow/";
+                String url = theUrl + "follow/";
                 String result = "";
 
                 try {

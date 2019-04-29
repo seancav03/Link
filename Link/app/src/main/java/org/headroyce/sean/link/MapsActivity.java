@@ -52,6 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int requestCode4 = 8282;
     //request code for showing list of events
     private static final int requestCode5 = 2882;
+    //url
+    private static String theUrl = "https://floating-beach-94674.herokuapp.com/";
 
     //O(1)
     @Override
@@ -294,7 +296,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //create object to send request to server
         HttpRequest request = new HttpRequest("POST", params);
 
-        String url = "https://floating-beach-94674.herokuapp.com/addEvent/";
+        String url = theUrl + "addEvent/";
         String result = "";
 
         try {
@@ -321,7 +323,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //HttpPostRequest request = new HttpPostRequest(id);
 
-        String url = "https://floating-beach-94674.herokuapp.com/removeEvent/";
+        String url = theUrl + "removeEvent/";
         String result = "";
 
         try {
@@ -353,7 +355,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //create object to send request to server
         HttpRequest request = new HttpRequest("GET", params);
 
-        String url = "https://floating-beach-94674.herokuapp.com/getMyFeed/";
+        String url = theUrl + "getMyFeed/";
         String result = "";
 
         try {
