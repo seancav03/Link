@@ -1,0 +1,27 @@
+{
+  "name": "design_project_package",
+  "version": "1.0.0",
+  "description": "Design Project 2 Server Package",
+  "main": "LServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Design",
+    "Project",
+    "Link",
+    "Event",
+    "Events"
+  ],
+  "author": "Sean Cavalieri",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "pg": "^7.7.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.41.2"
+  },
+  "engines": {
+    "node": "10.x"
+  }
+}
