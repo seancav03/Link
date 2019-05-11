@@ -1,10 +1,10 @@
-# Windows version
+#UNIX version
 
-# Ignore node_modules folder 
+# Ignore node_modules folder
 node_modules/
 
 # Ignore android studio caches
-Link/.idea/caches/
+Link/.idea/caches
 
 # Ignore all database files
 *.db

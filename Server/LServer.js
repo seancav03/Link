@@ -8,8 +8,7 @@ const database = require('./LDatabase');
 //for parsing larger image size bodies
 const bodyParser = require('body-parser');
 
-app.use(bodyParser({limit: '50mb'}, { extended: false }));
-
+app.use(bodyParser.urlencoded({limit: '50mb', extended:true}));
 
 //for checking connection
 //O(1)
@@ -37,16 +36,16 @@ app.get('/getEvents', function(req, res) {
 //adds event by parameters
 //O(1)
 app.post('/addEvent', function(req, res) {
-    let newTitle = req.headers.title;
-    let newDescription = req.headers.description;
-    let newMonth = req.headers.month;
-    let newDay = req.headers.day;
-    let newYear = req.headers.year;
-    let newHour = req.headers.hour;
-    let newMinute = req.headers.minute;
-    let newLat = req.headers.lat;
-    let newLng = req.headers.lng;
-    let user = req.headers.username;
+    let newTitle = req.body.title;
+    let newDescription = req.body.description;
+    let newMonth = req.body.month;
+    let newDay = req.body.day;
+    let newYear = req.body.year;
+    let newHour = req.body.hour;
+    let newMinute = req.body.minute;
+    let newLat = req.body.lat;
+    let newLng = req.body.lng;
+    let user = req.body.username;
     database.addEvent(newTitle, newDescription, newMonth, newDay, newYear, newHour, newMinute, newLat, newLng, user);
     res.send('Successfully added Event');
 });
@@ -54,8 +53,10 @@ app.post('/addEvent', function(req, res) {
 //add new user if username isn't already taken
 //O(n)
 app.post('/newUser', function(req, res) {
-    let nUsername = req.headers.username;
-    let nPassword = req.headers.password;
+
+    let nUsername = req.body.username;
+    let nPassword = req.body.password;
+
     let thisPromise = database.addUser(nUsername, nPassword);
     thisPromise.then(result => {
         if(result == "Username Already Taken"){
@@ -72,10 +73,10 @@ app.post('/newUser', function(req, res) {
 
 //authenticate existing user
 //O(n)
-app.get('/login', function(req, res) {
+app.post('/login', function(req, res) {
 
-    let username = req.headers.username;
-    let password = req.headers.password;
+    let username = req.body.username;
+    let password = req.body.password;
     let thisPromise = database.login(username, password);
     thisPromise.then(result => {
         if(result == 1){
@@ -92,7 +93,7 @@ app.get('/login', function(req, res) {
 //O(n)
 app.post('/removeEvent', function(req, res) {
 
-    let eventID = req.headers.eventid;
+    let eventID = req.body.eventid;
     database.removeEvent(eventID);
     res.send("DONE!")
 
@@ -102,7 +103,8 @@ app.post('/removeEvent', function(req, res) {
 //O(n)
 app.get('/getMyFeed', function(req, res) {
 
-    let username = req.headers.username;
+    let username = req.query.username;
+
     let thisPromise = database.getFollows(username);
     thisPromise.then(result => {
         let arr = [];
@@ -130,8 +132,8 @@ app.get('/getMyFeed', function(req, res) {
 //O(n)
 app.get('/follow', function(req, res) {
 
-    let username = req.headers.username;
-    let theirs = req.headers.theirs;
+    let username = req.query.username;
+    let theirs = req.query.theirs;
     let promise = database.follow(username, theirs);
     promise.then(result => {
         if(result == 'Done'){
@@ -146,8 +148,8 @@ app.get('/follow', function(req, res) {
 //O(n)
 app.get('/unfollow', function(req, res) {
 
-    let username = req.headers.username;
-    let theirs = req.headers.theirs;
+    let username = req.query.username;
+    let theirs = req.query.theirs;
     database.unfollow(username, theirs);
     res.send("Done");
 
@@ -156,7 +158,7 @@ app.get('/unfollow', function(req, res) {
 //O(n)
 app.get('/getFriends', function(req, res) {
 
-    let username = req.headers.username;
+    let username = req.query.username;
     let thisPromise = database.getFriends(username);
     thisPromise.then(result => {
         let objectToSend = {
@@ -174,9 +176,8 @@ app.get('/getFriends', function(req, res) {
 
 //add profile pic
 app.post('/editProfilePic', function(req, res) {
-    console.log(req);
-    let username = req.headers.username;
-    let pic = req.headers.pic;
+    let username = req.body.username;
+    let pic = req.body.pic;
     database.editProfilePic(username, pic);
     res.send("Added Profile Pic");
 });
@@ -184,7 +185,7 @@ app.post('/editProfilePic', function(req, res) {
 //get profile pic for user
 app.get('/getProfilePic', function(req, res) {
     
-    let username = req.headers.username;
+    let username = req.query.username;
     let promise = database.getProfilePic(username);
     promise.then(result => {
         res.send(result);
