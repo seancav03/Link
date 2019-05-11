@@ -27,7 +27,8 @@ public class loginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
 
-    private static String theUrl = "https://floating-beach-94674.herokuapp.com/";
+//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
+    private static String theUrl = "http://10.10.10.119:3775/";
 
     //O(1)
     @Override

@@ -64,4 +64,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/back" />
 
+    <ImageButton
+        android:id="@+id/profilePicker"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:background="#00000000"
+        app:layout_constraintStart_toEndOf="@+id/Icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/profile_pic_round" />
+
 </android.support.constraint.ConstraintLayout>

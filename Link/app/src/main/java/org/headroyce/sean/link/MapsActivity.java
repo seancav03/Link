@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -53,7 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //request code for showing list of events
     private static final int requestCode5 = 2882;
     //url
-    private static String theUrl = "https://floating-beach-94674.herokuapp.com/";
+//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
+    private static String theUrl = "http://10.10.10.119:3775/";
 
     //O(1)
     @Override
@@ -368,7 +370,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LList<Event> eventList = null;
 
         mMap.clear();
-        Calendar cal = Calendar.getInstance();
+
 
         try {
 
@@ -394,16 +396,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Event it = new Event(name1, name2, Integer.parseInt(name3), Integer.parseInt(name4), Integer.parseInt(name5), Integer.parseInt(name6), Integer.parseInt(name7), tempHere);
                 it.setUsername(name10);
                 it.setIDNumber(name11);
-                //remove Event from server if it is in the past
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                if(year > it.getYear() || year == it.getYear() && month > it.getMonth() || year == it.getYear() && month == it.getMonth() && day > it.getDay()){
-                    removeEvent(name11);
-                    Log.d("Removed", "Event Removed as it's in past: " + it.getTitle());
-                } else {
-                    eventList.add(it);
-                }
+                //add event to list
+                eventList.add(it);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -426,7 +420,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markers.clear();    //make sure past markers are gone from list
         for(Event ev : events) {
             LatLng loc = ev.getLocation();
-            MarkerOptions m = new MarkerOptions().position(loc).title(ev.getTitle());
+            //check if event is future or past. Red for future, blue for past
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            MarkerOptions m;
+            if(year > ev.getYear() || year == ev.getYear() && month > ev.getMonth() || year == ev.getYear() && month == ev.getMonth() && day > ev.getDay()){
+                m = new MarkerOptions().position(loc).title(ev.getTitle()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            } else {
+                m = new MarkerOptions().position(loc).title(ev.getTitle()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
+
             //minute must be a string so that 8:00 isn't desplayed as 8:0
             String minute;
             if(ev.getMinute() < 10){

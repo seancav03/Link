@@ -165,6 +165,29 @@ app.get('/getFriends', function(req, res) {
 
 });
 
+
+//add profile pic
+app.get('/editProfilePic', function(req, res) {
+    console.log(req);
+    let username = req.headers.username;
+    let pic = req.headers.pic;
+    database.editProfilePic(username, pic);
+    res.send("Added Profile Pic");
+});
+
+//get profile pic for user
+app.get('/getProfilePic', function(req, res) {
+    
+    let username = req.headers.username;
+    let promise = database.getProfilePic(username);
+    promise.then(result => {
+        res.send(result);
+    }).catch( result => {
+        res.send("NONE");
+    })
+});
+
+
 //Server Listening (3775 swapped with "port" for cloud)
 //O(1)
 app.listen(port, () => console.log('App listening on port 3775!'));

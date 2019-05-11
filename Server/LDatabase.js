@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://127.0.0.1:5432/link_dev")
+const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://127.0.0.1:5432/link2_locdat")
 
 //Define events Table
 const Events = sequelize.define('Events', {
@@ -22,6 +22,7 @@ console.log("Creating Tables");
 const Accounts = sequelize.define('Accounts', {
     Username: Sequelize.STRING,
     Password: Sequelize.STRING,
+    Profile: Sequelize.STRING
 })
 Accounts.sync();
 
@@ -101,7 +102,8 @@ exports.addUser = function(newUsername, newPassword) {
             } else {
                 Accounts.create({
                     Username: newUsername,
-                    Password: newPassword
+                    Password: newPassword,
+                    Profile: "NONE"
                 })
                 //follow yourself to see your own posts
                 Follows.create({
@@ -113,6 +115,29 @@ exports.addUser = function(newUsername, newPassword) {
         })
     } )
     return thisPromise;
+};
+
+//add profile pic to user
+exports.editProfilePic = function(username, pic){
+    console.log("+++ editing profile pic")
+    Accounts.update(
+        { Profile: pic },
+        { where: { Username: username } }
+    )
+};
+
+//gets profile pic from user
+exports.getProfilePic = function(username){
+    let promise = new Promise(function(resolve, reject){
+        Accounts.findAll({
+            where: {
+                Username: username
+            }
+        }).then(result => {
+            resolve(result[0].Profile);
+        })
+    });
+    return promise;
 };
 
 //login user if username and password match existing account
