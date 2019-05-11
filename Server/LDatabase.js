@@ -1,6 +1,10 @@
 const Sequelize = require('sequelize')
 const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://127.0.0.1:5432/link2_locdat")
 
+// Localized Development URI
+//const sequelize = new Sequelize(process.env.DATABASE_URL || "sqlite://./database.db")
+
+
 //Define events Table
 const Events = sequelize.define('Events', {
     Title: Sequelize.STRING,

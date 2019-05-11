@@ -176,7 +176,6 @@ app.get('/getFriends', function(req, res) {
 
 //add profile pic
 app.post('/editProfilePic', function(req, res) {
-    console.log('editProfilePic:', req);
     let username = req.body.username;
     let pic = req.body.pic;
     database.editProfilePic(username, pic);
