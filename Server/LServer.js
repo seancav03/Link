@@ -8,7 +8,7 @@ const database = require('./LDatabase');
 //for parsing larger image size bodies
 const bodyParser = require('body-parser');
 
-app.use(bodyParser({limit: '50mb'}, { extended: false }));
+app.use(bodyParser.urlencoded({limit: '50mb', extended:true}));
 
 
 //for checking connection
@@ -37,16 +37,16 @@ app.get('/getEvents', function(req, res) {
 //adds event by parameters
 //O(1)
 app.post('/addEvent', function(req, res) {
-    let newTitle = req.headers.title;
-    let newDescription = req.headers.description;
-    let newMonth = req.headers.month;
-    let newDay = req.headers.day;
-    let newYear = req.headers.year;
-    let newHour = req.headers.hour;
-    let newMinute = req.headers.minute;
-    let newLat = req.headers.lat;
-    let newLng = req.headers.lng;
-    let user = req.headers.username;
+    let newTitle = req.body.title;
+    let newDescription = req.body.description;
+    let newMonth = req.body.month;
+    let newDay = req.body.day;
+    let newYear = req.body.year;
+    let newHour = req.body.hour;
+    let newMinute = req.body.minute;
+    let newLat = req.body.lat;
+    let newLng = req.body.lng;
+    let user = req.body.username;
     database.addEvent(newTitle, newDescription, newMonth, newDay, newYear, newHour, newMinute, newLat, newLng, user);
     res.send('Successfully added Event');
 });
@@ -54,8 +54,9 @@ app.post('/addEvent', function(req, res) {
 //add new user if username isn't already taken
 //O(n)
 app.post('/newUser', function(req, res) {
-    let nUsername = req.headers.username;
-    let nPassword = req.headers.password;
+
+    let nUsername = req.body.username;
+    let nPassword = req.body.password;
     let thisPromise = database.addUser(nUsername, nPassword);
     thisPromise.then(result => {
         if(result == "Username Already Taken"){
@@ -174,9 +175,9 @@ app.get('/getFriends', function(req, res) {
 
 //add profile pic
 app.post('/editProfilePic', function(req, res) {
-    console.log(req);
-    let username = req.headers.username;
-    let pic = req.headers.pic;
+    console.log('editProfilePic:', req);
+    let username = req.body.username;
+    let pic = req.body.pic;
     database.editProfilePic(username, pic);
     res.send("Added Profile Pic");
 });
