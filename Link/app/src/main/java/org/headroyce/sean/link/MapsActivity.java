@@ -53,9 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int requestCode4 = 8282;
     //request code for showing list of events
     private static final int requestCode5 = 2882;
-    //url
-//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    private static String theUrl = "http://10.10.10.119:3775/";
 
     //O(1)
     @Override
@@ -298,7 +295,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //create object to send request to server
         HttpRequest request = new HttpRequest("POST", params);
 
-        String url = theUrl + "addEvent/";
+        String url = HttpRequest.theUrl + "addEvent/";
         String result = "";
 
         try {
@@ -325,7 +322,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //HttpPostRequest request = new HttpPostRequest(id);
 
-        String url = theUrl + "removeEvent/";
+        String url = HttpRequest.theUrl + "removeEvent/";
         String result = "";
 
         try {
@@ -357,7 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //create object to send request to server
         HttpRequest request = new HttpRequest("GET", params);
 
-        String url = theUrl + "getMyFeed/";
+        String url = HttpRequest.theUrl + "getMyFeed/";
         String result = "";
 
         try {

@@ -27,9 +27,6 @@ public class loginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
 
-//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    private static String theUrl = "http://10.10.10.119:3775/";
-
     //O(1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +84,10 @@ public class loginActivity extends AppCompatActivity {
             params.add(new keyAndValue("password", pass));
 
             //create object to send request to server
-            HttpRequest request = new HttpRequest("GET", params);
+            HttpRequest request = new HttpRequest("POST", params);
 
 
-            String url = theUrl + "login/";
+            String url = HttpRequest.theUrl + "login/";
             String result = "";
 
             try {
@@ -101,7 +98,6 @@ public class loginActivity extends AppCompatActivity {
             }
 
             if(result.equals("Success")){
-
                 Toast.makeText(loginActivity.this, "Welcome " + user,
                         Toast.LENGTH_SHORT).show();
 
@@ -158,7 +154,7 @@ public class loginActivity extends AppCompatActivity {
             //create object to send request to server
             HttpRequest request = new HttpRequest("POST", params);
 
-            String url = theUrl + "newUser/";
+            String url = HttpRequest.theUrl + "newUser/";
             String result = "";
 
             try {

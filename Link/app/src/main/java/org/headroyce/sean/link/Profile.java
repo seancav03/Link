@@ -32,7 +32,7 @@ public class Profile extends AppCompatActivity {
 
     private int SELECT_PROFILE_PIC_REQUEST_CODE = 2468;
 //    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    private static String theUrl = "http://10.10.10.119:3775/";
+    private static String theUrl = "http://192.168.1.199:3775/";
 
     private String user;
 

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -18,6 +19,11 @@ import java.net.URL;
  */
 
 public class HttpRequest extends AsyncTask<String, Void, String> {
+
+    // The Centralized Application URL to use
+    // public static final String theUrl = "https://powerful-sands-36300.herokuapp.com/";
+    public static final String theUrl = "http://10.10.10.119:3775/";
+
 
     private LList<keyAndValue> params = new LList<keyAndValue>();
     private String requestType;
@@ -39,9 +45,24 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(requestType);
             if (params != null) {
+
+                // Create URL Encoded key/value pairs for now
+                // This is probably better done as JSON-encodeds
+                StringBuilder output = new StringBuilder();
                 for (keyAndValue pair : params) {
-                    connection.addRequestProperty(pair.getKey(), pair.getValue());
+                    output.append("&"+pair.getKey()+"="+pair.getValue());
+                    //connection.addRequestProperty(pair.getKey(), pair.getValue());
                 }
+
+                // Remove the & from the first parameter
+                output.delete(0,1);
+                OutputStream out = new BufferedOutputStream(connection.getOutputStream());
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
+                bw.write(output.toString());
+                bw.flush();
+                bw.close();
+                out.close();
             }
 
             connection.setReadTimeout(15000);
