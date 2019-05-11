@@ -31,8 +31,6 @@ public class Profile extends AppCompatActivity {
     private ImageView profilePic;
 
     private int SELECT_PROFILE_PIC_REQUEST_CODE = 2468;
-//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    private static String theUrl = "http://192.168.1.199:3775/";
 
     private String user;
 
@@ -70,7 +68,7 @@ public class Profile extends AppCompatActivity {
         //create object to send request to server
         HttpRequest request = new HttpRequest("GET", params);
 
-        String url = theUrl + "getProfilePic/";
+        String url = HttpRequest.theUrl + "getProfilePic/";
         String result = "";
 
         try {
@@ -144,7 +142,7 @@ public class Profile extends AppCompatActivity {
                 //create object to send request to server
                 HttpRequest request = new HttpRequest("POST", params);
 
-                String url = theUrl + "editProfilePic/";
+                String url = HttpRequest.theUrl + "editProfilePic/";
                 String result = "";
 
                 try {
