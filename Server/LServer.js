@@ -5,6 +5,12 @@ let port  = process.env.PORT || 3775;
 
 const database = require('./LDatabase');
 
+//for parsing larger image size bodies
+const bodyParser = require('body-parser');
+
+app.use(bodyParser({limit: '50mb'}, { extended: false }));
+
+
 //for checking connection
 //O(1)
 app.get('/', function(req, res) {
@@ -167,7 +173,7 @@ app.get('/getFriends', function(req, res) {
 
 
 //add profile pic
-app.get('/editProfilePic', function(req, res) {
+app.post('/editProfilePic', function(req, res) {
     console.log(req);
     let username = req.headers.username;
     let pic = req.headers.pic;

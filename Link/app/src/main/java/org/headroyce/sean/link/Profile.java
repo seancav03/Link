@@ -142,7 +142,7 @@ public class Profile extends AppCompatActivity {
                 params.add(new keyAndValue("pic", imageStr));
 
                 //create object to send request to server
-                HttpRequest request = new HttpRequest("GET", params);
+                HttpRequest request = new HttpRequest("POST", params);
 
                 String url = theUrl + "editProfilePic/";
                 String result = "";

@@ -38,30 +38,11 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             URL url = new URL(StringURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(requestType);
-            //functioning code fallback
-//            if(requestType.equals("GET")) {
-                if (params != null) {
-                    for (keyAndValue pair : params) {
-                        connection.addRequestProperty(pair.getKey(), pair.getValue());
-                    }
+            if (params != null) {
+                for (keyAndValue pair : params) {
+                    connection.addRequestProperty(pair.getKey(), pair.getValue());
                 }
-//            } else {
-//                Uri.Builder builder = new Uri.Builder();
-//                if(params != null){
-//                    for(keyAndValue pair : params){
-//                        builder.appendQueryParameter(pair.getKey(), pair.getValue());
-//                    }
-//                }
-//                String query = builder.build().getEncodedQuery();
-//                OutputStream os = connection.getOutputStream();
-//                BufferedWriter writer = new BufferedWriter(
-//                        new OutputStreamWriter(os, "UTF-8"));
-//                writer.write(query);
-//                writer.flush();
-//                writer.close();
-//                os.close();
-//            }
-
+            }
 
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(15000);
@@ -90,3 +71,21 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         return result;
     }
 }
+
+
+
+//testing stuff ignore
+//                Uri.Builder builder = new Uri.Builder();
+//                if(params != null){
+//                    for(keyAndValue pair : params){
+//                        builder.appendQueryParameter(pair.getKey(), pair.getValue());
+//                    }
+//                }
+//                String query = builder.build().getEncodedQuery();
+//                OutputStream os = connection.getOutputStream();
+//                BufferedWriter writer = new BufferedWriter(
+//                        new OutputStreamWriter(os, "UTF-8"));
+//                writer.write(query);
+//                writer.flush();
+//                writer.close();
+//                os.close();
