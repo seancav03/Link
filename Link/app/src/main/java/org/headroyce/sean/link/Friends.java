@@ -84,7 +84,7 @@ public class Friends extends AppCompatActivity {
         params.add(new keyAndValue("username", user));
 
         //create object to send request to server
-        HttpRequest request = new HttpRequest("GET", params);
+        HttpRequest request = new HttpRequest("POST", params);
 
 
         String url = theUrl + "getFriends/";
@@ -161,7 +161,7 @@ public class Friends extends AppCompatActivity {
             params.add(new keyAndValue("username", user));
             params.add(new keyAndValue("theirs", friends.get(id)));
 
-            HttpRequest request = new HttpRequest("GET", params);
+            HttpRequest request = new HttpRequest("POST", params);
 
             String url = theUrl + "unfollow/";
             String result = "";
@@ -199,7 +199,7 @@ public class Friends extends AppCompatActivity {
                 params.add(new keyAndValue("theirs", theirs));
 
                 //create object to send request to server
-                HttpRequest request = new HttpRequest("GET", params);
+                HttpRequest request = new HttpRequest("POST", params);
 
 
                 String url = theUrl + "follow/";

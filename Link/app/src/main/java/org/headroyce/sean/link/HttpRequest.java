@@ -22,7 +22,8 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
 
     // The Centralized Application URL to use
     // public static final String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    public static final String theUrl = "http://10.10.10.119:3775/";
+//    public static final String theUrl = "http://10.10.10.119:3775/";
+    public static final String theUrl = "http://10.40.0.175:3775/";
 
 
     private LList<keyAndValue> params = new LList<keyAndValue>();
@@ -49,7 +50,13 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                 // Create URL Encoded key/value pairs for now
                 // This is probably better done as JSON-encodeds
                 StringBuilder output = new StringBuilder();
+
+                boolean p = false;
                 for (keyAndValue pair : params) {
+
+                    if( pair.getKey().equals("pic") ){
+                        p = true;
+                    }
                     output.append("&"+pair.getKey()+"="+pair.getValue());
                     //connection.addRequestProperty(pair.getKey(), pair.getValue());
                 }
@@ -59,6 +66,9 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                 OutputStream out = new BufferedOutputStream(connection.getOutputStream());
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
 
+                if( p ) {
+                    Log.d("pic2", output.toString());
+                }
                 bw.write(output.toString());
                 bw.flush();
                 bw.close();

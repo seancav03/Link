@@ -352,7 +352,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         params.add(new keyAndValue("username", user));
 
         //create object to send request to server
-        HttpRequest request = new HttpRequest("GET", params);
+        HttpRequest request = new HttpRequest("POST", params);
 
         String url = HttpRequest.theUrl + "getMyFeed/";
         String result = "";
@@ -370,7 +370,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         try {
-
+            Log.d("124+", "--> " + result);
             JSONObject jsonObject = new JSONObject(result);
             JSONArray array = jsonObject.getJSONArray("data");
 

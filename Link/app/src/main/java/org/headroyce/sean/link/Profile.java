@@ -66,7 +66,7 @@ public class Profile extends AppCompatActivity {
         params.add(new keyAndValue("username", user));
 
         //create object to send request to server
-        HttpRequest request = new HttpRequest("GET", params);
+        HttpRequest request = new HttpRequest("POST", params);
 
         String url = HttpRequest.theUrl + "getProfilePic/";
         String result = "";
@@ -83,6 +83,7 @@ public class Profile extends AppCompatActivity {
             Log.d("NO Image Available", "NONE");
             //DO NOTHING. NO PROFILE PIC. SHOULD I GIVE MESSAGE HERE ASKING FOR ONE?
         } else {
+            Log.d("RESULT: ", "HERE: " + result);
             byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profilePic.setImageBitmap(decodedByte);
@@ -134,6 +135,7 @@ public class Profile extends AppCompatActivity {
 
                 //TODO: WORK HERE
                 String imageStr = getStringImage(bitmap);
+                Log.d("Image String: ", "Start: " + imageStr);
 
                 LList<keyAndValue> params = new LList<keyAndValue>();
                 params.add(new keyAndValue("username", user));

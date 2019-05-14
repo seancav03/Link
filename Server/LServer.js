@@ -8,7 +8,7 @@ const database = require('./LDatabase');
 //for parsing larger image size bodies
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({limit: '50mb', extended:true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended:false}));
 
 //for checking connection
 //O(1)
@@ -18,7 +18,7 @@ app.get('/', function(req, res) {
 
 //get all events. Currently unused by app
 //O(n)
-app.get('/getEvents', function(req, res) {
+app.post('/getEvents', function(req, res) {
     let promise = database.getEvents();
     promise.then(result => {
         let objectToSend = {
@@ -101,10 +101,9 @@ app.post('/removeEvent', function(req, res) {
 
 //get posts only for accounts you are following
 //O(n)
-app.get('/getMyFeed', function(req, res) {
+app.post('/getMyFeed', function(req, res) {
 
-    let username = req.query.username;
-
+    let username = req.body.username;
     let thisPromise = database.getFollows(username);
     thisPromise.then(result => {
         let arr = [];
@@ -130,10 +129,10 @@ app.get('/getMyFeed', function(req, res) {
 
 //follow user
 //O(n)
-app.get('/follow', function(req, res) {
+app.post('/follow', function(req, res) {
 
-    let username = req.query.username;
-    let theirs = req.query.theirs;
+    let username = req.body.username;
+    let theirs = req.body.theirs;
     let promise = database.follow(username, theirs);
     promise.then(result => {
         if(result == 'Done'){
@@ -146,19 +145,19 @@ app.get('/follow', function(req, res) {
 });
 //unfollow user
 //O(n)
-app.get('/unfollow', function(req, res) {
+app.post('/unfollow', function(req, res) {
 
-    let username = req.query.username;
-    let theirs = req.query.theirs;
+    let username = req.body.username;
+    let theirs = req.body.theirs;
     database.unfollow(username, theirs);
     res.send("Done");
 
 });
 //get list of friends
 //O(n)
-app.get('/getFriends', function(req, res) {
+app.post('/getFriends', function(req, res) {
 
-    let username = req.query.username;
+    let username = req.body.username;
     let thisPromise = database.getFriends(username);
     thisPromise.then(result => {
         let objectToSend = {
@@ -178,16 +177,22 @@ app.get('/getFriends', function(req, res) {
 app.post('/editProfilePic', function(req, res) {
     let username = req.body.username;
     let pic = req.body.pic;
+    console.log("-------");
+    console.log(pic);
     database.editProfilePic(username, pic);
     res.send("Added Profile Pic");
 });
 
 //get profile pic for user
-app.get('/getProfilePic', function(req, res) {
+app.post('/getProfilePic', function(req, res) {
+
+    console.log("getting profile pic");
     
-    let username = req.query.username;
+    let username = req.body.username;
     let promise = database.getProfilePic(username);
     promise.then(result => {
+        console.log("===================");
+        console.log(result);
         res.send(result);
     }).catch( result => {
         res.send("NONE");
