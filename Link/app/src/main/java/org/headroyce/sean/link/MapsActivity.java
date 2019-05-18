@@ -2,8 +2,16 @@ package org.headroyce.sean.link;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,6 +36,8 @@ import java.util.Calendar;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private float zoomLevel;
 
     //buttons
     private ImageButton add;
@@ -108,6 +118,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //set listener to detect long click of events
         mMap.setOnInfoWindowClickListener(new infoWindowClickedListener());
+        zoomLevel = mMap.getCameraPosition().zoom;
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+
+                if(mMap.getCameraPosition().zoom != zoomLevel){
+                    mapEvents();
+                    zoomLevel = mMap.getCameraPosition().zoom;
+                    Log.d("--", "=+++++++++++++++++++++++");
+                }
+            }
+        });
     }
 
     //Profile Button Listener
@@ -360,9 +382,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             result = request.execute(url).get();
         } catch (Exception e) {
-            Log.d("CONNECTION 1", e.getMessage());
+//            Log.d("CONNECTION 1", e.getMessage());
         }
-        Log.d("Result: ", "Result: " + result);
+//        Log.d("Result: ", "Result: " + result);
 
         LList<Event> eventList = null;
 
@@ -370,7 +392,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         try {
-            Log.d("124+", "--> " + result);
+//            Log.d("124+", "--> " + result);
             JSONObject jsonObject = new JSONObject(result);
             JSONArray array = jsonObject.getJSONArray("data");
 
@@ -389,7 +411,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String name10 = arrayOfStrings.get(9).toString();   //Username
                 String name11 = arrayOfStrings.get(10).toString();  //ID
                 LatLng tempHere = new LatLng(Double.parseDouble(name8), Double.parseDouble(name9));
-                Log.d("LAT AND LNG Getting", tempHere.latitude + ", " + tempHere.longitude);
+//                Log.d("LAT AND LNG Getting", tempHere.latitude + ", " + tempHere.longitude);
                 Event it = new Event(name1, name2, Integer.parseInt(name3), Integer.parseInt(name4), Integer.parseInt(name5), Integer.parseInt(name6), Integer.parseInt(name7), tempHere);
                 it.setUsername(name10);
                 it.setIDNumber(name11);
@@ -398,12 +420,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("FAILED", "FAILED TO PARSE EVENTS ARRAY");
+//            Log.d("FAILED", "FAILED TO PARSE EVENTS ARRAY");
         }
 
         if(eventList != null) {
             events = eventList;
-            Log.d("SUCCESS", "GOT EVENTS FROM SERVER");
+//            Log.d("SUCCESS", "GOT EVENTS FROM SERVER");
             mapEvents();
         } else {
             events = null;
@@ -415,6 +437,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker at every event
         markers.clear();    //make sure past markers are gone from list
+        mMap.clear();
         for(Event ev : events) {
             LatLng loc = ev.getLocation();
             //check if event is future or past. Red for future, blue for past
@@ -437,12 +460,78 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 minute = Integer.toString(ev.getMinute());
             }
             m.snippet("Date: "  + + ev.getMonth() + "/" + ev.getDay() + "/" + ev.getYear() + " at " + ev.getHour() +":" + minute +", CLICK ME for more info");
+            //set icon to user's profile pic if they have one
+            Bitmap b = getProfPic(ev.getUsername());
+            b = Bitmap.createScaledBitmap(b, ((int)mMap.getCameraPosition().zoom * 10), ((int)mMap.getCameraPosition().zoom * 10), false);
+            b = getCroppedBitmap(b);
+            if(b != null) {
+                m.icon(BitmapDescriptorFactory.fromBitmap(b));
+            }
             Marker m2 = mMap.addMarker(m);
             ev.setID(m2.getId());
             markers.add(m2);
         }
 
     }
+
+    //get profile picture from username
+    public Bitmap getProfPic(String username){
+
+        LList<keyAndValue> params = new LList<keyAndValue>();
+        params.add(new keyAndValue("username", username));
+
+        //create object to send request to server
+        HttpRequest request = new HttpRequest("POST", params);
+
+        String url = HttpRequest.theUrl + "getProfilePic/";
+        String result = "";
+
+        try {
+            result = request.execute(url).get();
+        }
+        catch( Exception e ) {
+//            Log.d("CONNECTION 111", e.getMessage());
+        }
+
+        //check what I get back for if there is an image stored
+        if(result.equals("NONE") || result.equals("")){
+            //No profile Pic, leave icon as default
+            return null;
+        } else {
+            try {
+                result = result.replace("-", "+");
+                byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                return decodedByte;
+            } catch (Exception e){
+                return null;
+            }
+        }
+    }
+
+    //crop bitmap into a circle
+    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+        //return _bmp;
+        return output;
+    }
+
 
     //find the event which was selcted by the info window being clicked
     public class infoWindowClickedListener implements GoogleMap.OnInfoWindowClickListener {
@@ -459,7 +548,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
             if (selected == null) {
-                Log.d("OH NO!", "Event ID from clicked info window does not exist for any known event");
+//                Log.d("OH NO!", "Event ID from clicked info window does not exist for any known event");
                 //reload events to remove any pins that should not exist
                 reloadEvents();
                 return;

@@ -22,8 +22,10 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
 
     // The Centralized Application URL to use
     // public static final String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-//    public static final String theUrl = "http://10.10.10.119:3775/";
-    public static final String theUrl = "http://10.40.0.175:3775/";
+    public static final String theUrl = "http://10.10.10.119:3775/";
+//    public static final String theUrl = "http://10.40.0.129:3775/";
+
+    //https://www.headroyce.org/calendar/team_31.ics
 
 
     private LList<keyAndValue> params = new LList<keyAndValue>();

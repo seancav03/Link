@@ -75,18 +75,21 @@ public class Profile extends AppCompatActivity {
             result = request.execute(url).get();
         }
         catch( Exception e ) {
-            Log.d("CONNECTION 111", e.getMessage());
+//            Log.d("CONNECTION 111", e.getMessage());
         }
 
         //check what I get back for if there is an image stored
         if(result.equals("NONE") || result.equals("")){
-            Log.d("NO Image Available", "NONE");
             //DO NOTHING. NO PROFILE PIC. SHOULD I GIVE MESSAGE HERE ASKING FOR ONE?
         } else {
-            Log.d("RESULT: ", "HERE: " + result);
-            byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            profilePic.setImageBitmap(decodedByte);
+            try {
+                result = result.replace("-", "+");
+                byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                profilePic.setImageBitmap(decodedByte);
+            } catch (Exception e){
+//                Log.d("ERROR", "Couldn't parse image");
+            }
         }
     }
 
@@ -135,7 +138,8 @@ public class Profile extends AppCompatActivity {
 
                 //TODO: WORK HERE
                 String imageStr = getStringImage(bitmap);
-                Log.d("Image String: ", "Start: " + imageStr);
+                imageStr = imageStr.replace('+', '-');
+//                Log.d("Image String: ", "Start: " + imageStr);
 
                 LList<keyAndValue> params = new LList<keyAndValue>();
                 params.add(new keyAndValue("username", user));
@@ -151,7 +155,7 @@ public class Profile extends AppCompatActivity {
                     result = request.execute(url).get();
                 }
                 catch( Exception e ) {
-                    Log.d("CONNECTION 1", e.getMessage());
+//                    Log.d("CONNECTION 1", e.getMessage());
                 }
                 Toast.makeText(Profile.this, "Added Profile Pic",
                         Toast.LENGTH_SHORT).show();

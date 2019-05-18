@@ -36,8 +36,6 @@ public class Friends extends AppCompatActivity {
 
     private LList<String> friends;
 
-//    private static String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    private static String theUrl = "http://10.10.10.119:3775/";
 
     //O(1)
     @Override
@@ -87,7 +85,7 @@ public class Friends extends AppCompatActivity {
         HttpRequest request = new HttpRequest("POST", params);
 
 
-        String url = theUrl + "getFriends/";
+        String url = HttpRequest.theUrl + "getFriends/";
         String result = "";
 
         try {
@@ -163,7 +161,7 @@ public class Friends extends AppCompatActivity {
 
             HttpRequest request = new HttpRequest("POST", params);
 
-            String url = theUrl + "unfollow/";
+            String url = HttpRequest.theUrl + "unfollow/";
             String result = "";
 
             try {
@@ -202,7 +200,7 @@ public class Friends extends AppCompatActivity {
                 HttpRequest request = new HttpRequest("POST", params);
 
 
-                String url = theUrl + "follow/";
+                String url = HttpRequest.theUrl + "follow/";
                 String result = "";
 
                 try {
