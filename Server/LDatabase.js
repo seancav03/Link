@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize')
-// const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://127.0.0.1:5432/link2_locdat")
+const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://127.0.0.1:5432/link2_locdat")
 
 // Localized Development URI
-const sequelize = new Sequelize(process.env.DATABASE_URL || "sqlite://./database.db")
+//not used in server
+// const sequelize = new Sequelize(process.env.DATABASE_URL || "sqlite://./database.db")
 
 
 //Define events Table
@@ -24,9 +25,10 @@ Events.sync();
 const Accounts = sequelize.define('Accounts', {
     Username: Sequelize.STRING,
     Password: Sequelize.STRING,
-    Profile: Sequelize.STRING
+    Profile: Sequelize.TEXT
 })
 Accounts.sync();
+
 
 //define follows table. Each row has id, follower, and followed.
 //This table is search by follower to find the array of accounts to get the events of

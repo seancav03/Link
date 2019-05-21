@@ -55,12 +55,12 @@ public class Profile extends AppCompatActivity {
 
 
         //get profile pic and put it in if there is one
-        getProfPic(user);
+        getProfPic();
 
     }
 
     //get user's profile pic
-    public void getProfPic(String username){
+    public void getProfPic(){
 
         LList<keyAndValue> params = new LList<keyAndValue>();
         params.add(new keyAndValue("username", user));
@@ -84,11 +84,12 @@ public class Profile extends AppCompatActivity {
         } else {
             try {
                 result = result.replace("-", "+");
+//                result = result.replace(".", "=");
                 byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 profilePic.setImageBitmap(decodedByte);
             } catch (Exception e){
-//                Log.d("ERROR", "Couldn't parse image");
+                Log.d("ERROR", "Couldn't parse image");
             }
         }
     }
@@ -139,7 +140,8 @@ public class Profile extends AppCompatActivity {
                 //TODO: WORK HERE
                 String imageStr = getStringImage(bitmap);
                 imageStr = imageStr.replace('+', '-');
-//                Log.d("Image String: ", "Start: " + imageStr);
+//                imageStr = imageStr.replace('=', '.');
+                Log.d("Image String: ", "Start: " + imageStr);
 
                 LList<keyAndValue> params = new LList<keyAndValue>();
                 params.add(new keyAndValue("username", user));
@@ -155,7 +157,7 @@ public class Profile extends AppCompatActivity {
                     result = request.execute(url).get();
                 }
                 catch( Exception e ) {
-//                    Log.d("CONNECTION 1", e.getMessage());
+                    Log.d("CONNECTION 1", e.getMessage());
                 }
                 Toast.makeText(Profile.this, "Added Profile Pic",
                         Toast.LENGTH_SHORT).show();

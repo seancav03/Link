@@ -94,7 +94,7 @@ public class loginActivity extends AppCompatActivity {
                 result = request.execute(url).get();
             }
             catch( Exception e ){
-                //Log.d( "CONNECTION 1", e.getMessage());
+                Log.d( "CONNECTION 1", e.getMessage());
             }
 
             if(result.equals("Success")){

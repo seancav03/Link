@@ -77,9 +77,9 @@ public class ListActivity extends AppCompatActivity {
         params.add(new keyAndValue("username", username));
 
         //create object to send request to server
-        HttpRequest request = new HttpRequest("GET", params);
+        HttpRequest request = new HttpRequest("POST", params);
 
-        String url = "https://floating-beach-94674.herokuapp.com/getMyFeed/";
+        String url = HttpRequest.theUrl + "getMyFeed/";
         String result = "";
 
         try {

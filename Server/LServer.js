@@ -93,7 +93,7 @@ app.post('/login', function(req, res) {
 //O(n)
 app.post('/removeEvent', function(req, res) {
 
-    let eventID = req.body.eventid;
+    let eventID = req.body.eventID;
     database.removeEvent(eventID);
     res.send("DONE!")
 

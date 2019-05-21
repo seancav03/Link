@@ -144,6 +144,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), requestCode2);
             }
+
+
+
+
         }
     }
 

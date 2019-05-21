@@ -21,9 +21,8 @@ import java.net.URL;
 public class HttpRequest extends AsyncTask<String, Void, String> {
 
     // The Centralized Application URL to use
-    // public static final String theUrl = "https://powerful-sands-36300.herokuapp.com/";
-    public static final String theUrl = "http://10.10.10.119:3775/";
-//    public static final String theUrl = "http://10.40.0.129:3775/";
+     public static final String theUrl = "http://powerful-sands-36300.herokuapp.com/";
+//    public static final String theUrl = "http://10.10.10.119:3775/";
 
     //https://www.headroyce.org/calendar/team_31.ics
 
@@ -47,18 +46,14 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             URL url = new URL(StringURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(requestType);
-            if (params != null) {
+            if (params != null && requestType.equals("POST")) {
 
                 // Create URL Encoded key/value pairs for now
-                // This is probably better done as JSON-encodeds
+                // This is probably better done as JSON-encoded
                 StringBuilder output = new StringBuilder();
 
-                boolean p = false;
                 for (keyAndValue pair : params) {
 
-                    if( pair.getKey().equals("pic") ){
-                        p = true;
-                    }
                     output.append("&"+pair.getKey()+"="+pair.getValue());
                     //connection.addRequestProperty(pair.getKey(), pair.getValue());
                 }
@@ -68,9 +63,6 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                 OutputStream out = new BufferedOutputStream(connection.getOutputStream());
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
 
-                if( p ) {
-                    Log.d("pic2", output.toString());
-                }
                 bw.write(output.toString());
                 bw.flush();
                 bw.close();
@@ -104,21 +96,3 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         return result;
     }
 }
-
-
-
-//testing stuff ignore
-//                Uri.Builder builder = new Uri.Builder();
-//                if(params != null){
-//                    for(keyAndValue pair : params){
-//                        builder.appendQueryParameter(pair.getKey(), pair.getValue());
-//                    }
-//                }
-//                String query = builder.build().getEncodedQuery();
-//                OutputStream os = connection.getOutputStream();
-//                BufferedWriter writer = new BufferedWriter(
-//                        new OutputStreamWriter(os, "UTF-8"));
-//                writer.write(query);
-//                writer.flush();
-//                writer.close();
-//                os.close();
