@@ -126,7 +126,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(mMap.getCameraPosition().zoom != zoomLevel){
                     mapEvents();
                     zoomLevel = mMap.getCameraPosition().zoom;
-                    Log.d("--", "=+++++++++++++++++++++++");
                 }
             }
         });

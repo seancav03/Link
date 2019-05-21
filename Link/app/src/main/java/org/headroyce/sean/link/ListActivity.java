@@ -85,9 +85,9 @@ public class ListActivity extends AppCompatActivity {
         try {
             result = request.execute(url).get();
         } catch (Exception e) {
-            Log.d("CONNECTION 1", e.getMessage());
+//            Log.d("CONNECTION 1", e.getMessage());
         }
-        Log.d("Result: ", "Result: " + result);
+//        Log.d("Result: ", "Result: " + result);
 
         try {
 
@@ -109,7 +109,7 @@ public class ListActivity extends AppCompatActivity {
                 String name10 = arrayOfStrings.get(9).toString();   //Username
                 String name11 = arrayOfStrings.get(10).toString();  //ID
                 LatLng tempHere = new LatLng(Double.parseDouble(name8), Double.parseDouble(name9));
-                Log.d("LAT AND LNG Getting", tempHere.latitude + ", " + tempHere.longitude);
+//                Log.d("LAT AND LNG Getting", tempHere.latitude + ", " + tempHere.longitude);
                 Event it = new Event(name1, name2, Integer.parseInt(name3), Integer.parseInt(name4), Integer.parseInt(name5), Integer.parseInt(name6), Integer.parseInt(name7), tempHere);
                 it.setUsername(name10);
                 it.setIDNumber(name11);

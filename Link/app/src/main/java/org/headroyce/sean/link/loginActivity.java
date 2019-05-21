@@ -94,7 +94,7 @@ public class loginActivity extends AppCompatActivity {
                 result = request.execute(url).get();
             }
             catch( Exception e ){
-                Log.d( "CONNECTION 1", e.getMessage());
+//                Log.d( "CONNECTION 1", e.getMessage());
             }
 
             if(result.equals("Success")){
@@ -113,7 +113,7 @@ public class loginActivity extends AppCompatActivity {
             } else {
 
                 username.setError("Bad Connection. Find Better Connection.");
-                Log.d("Result", result);
+//                Log.d("Result", result);
 
             }
 
@@ -129,7 +129,7 @@ public class loginActivity extends AppCompatActivity {
             String user = username.getText().toString();
             String pass = password.getText().toString();
 
-            Log.d("ADDING USER", "ADDING");
+//            Log.d("ADDING USER", "ADDING");
 
             if(user == null || pass == null){
 
@@ -144,7 +144,7 @@ public class loginActivity extends AppCompatActivity {
                 return;
             }
 
-            Log.d("RAN", "RAAAAAAAAAAAAAAAAAN");
+//            Log.d("RAN", "RAAAAAAAAAAAAAAAAAN");
 
             //create params for logging in
             LList<keyAndValue> params = new LList<keyAndValue>();
@@ -161,9 +161,9 @@ public class loginActivity extends AppCompatActivity {
                 result = request.execute(url).get();
             }
             catch( Exception e ){
-                Log.d( "CONNECTION 1", e.getMessage());
+//                Log.d( "CONNECTION 1", e.getMessage());
             }
-            Log.d("Result -+-+-+-", result);
+//            Log.d("Result -+-+-+-", result);
 
             if(result.equals("Failed to add. Username already taken")){
 
