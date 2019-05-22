@@ -37,7 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
-    private float zoomLevel;
+//    private float zoomLevel;
 
     //buttons
     private ImageButton add;
@@ -54,15 +54,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LList<Marker> markers;
 
     //create new event startActivityForResult request code for creating new events
-    private static final int requestCode = 3775;
+    private static final int REQUEST_CODE_NEW_EVENT = 3775;
     //request code for logging in
-    private static final int requestCode2 = 5773;
+    private static final int REQUEST_CODE_LOGIN = 5773;
     //request code for looking at event description and deleting events
-    private static final int requestCode3 = 2828;
+    private static final int REQUEST_CODE_EVENT_INFO = 2828;
     //request code for viewing profile (tells main activity user logged out)
-    private static final int requestCode4 = 8282;
+    private static final int REQUEST_CODE_PROFILE = 8282;
     //request code for showing list of events
-    private static final int requestCode5 = 2882;
+    private static final int REQUEST_CODE_EVENTS_LIST = 2882;
 
     //O(1)
     @Override
@@ -118,17 +118,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //set listener to detect long click of events
         mMap.setOnInfoWindowClickListener(new infoWindowClickedListener());
-        zoomLevel = mMap.getCameraPosition().zoom;
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-
-                if(mMap.getCameraPosition().zoom != zoomLevel){
-                    mapEvents();
-                    zoomLevel = mMap.getCameraPosition().zoom;
-                }
-            }
-        });
+//        zoomLevel = mMap.getCameraPosition().zoom;
+//        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+//            @Override
+//            public void onCameraIdle() {
+//
+//                if(mMap.getCameraPosition().zoom != zoomLevel){
+//                    mapEvents();
+//                    zoomLevel = mMap.getCameraPosition().zoom;
+//                }
+//            }
+//        });
     }
 
     //Profile Button Listener
@@ -139,9 +139,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(currentAccount != null) {
                 Intent intent = new Intent(MapsActivity.this, Profile.class);
                 intent.putExtra("username", currentAccount);
-                startActivityForResult(intent, requestCode4);
+                startActivityForResult(intent, REQUEST_CODE_PROFILE);
             } else {
-                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), requestCode2);
+                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), REQUEST_CODE_LOGIN);
             }
 
 
@@ -156,9 +156,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onClick(View v) {
             if (currentAccount != null){
-                startActivityForResult(new Intent(MapsActivity.this, AddEventActivity.class), requestCode);
+                startActivityForResult(new Intent(MapsActivity.this, AddEventActivity.class), REQUEST_CODE_NEW_EVENT);
             } else {
-                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), requestCode2);
+                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), REQUEST_CODE_LOGIN);
             }
         }
     }
@@ -171,9 +171,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(currentAccount != null) {
                 Intent intent = new Intent(MapsActivity.this, ListActivity.class);
                 intent.putExtra("username", currentAccount);
-                startActivityForResult(intent, requestCode5);
+                startActivityForResult(intent, REQUEST_CODE_EVENTS_LIST);
             } else {
-                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), requestCode2);
+                startActivityForResult(new Intent(MapsActivity.this, loginActivity.class), REQUEST_CODE_LOGIN);
             }
         }
     }
@@ -184,7 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //if results are good, get all the data from the result intent
-        if (requestCode == this.requestCode) {
+        if (requestCode == this.REQUEST_CODE_NEW_EVENT) {
             if(resultCode == Activity.RESULT_OK){
                 String title = data.getStringExtra("title");
                 String description = data.getStringExtra("description");
@@ -209,7 +209,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result -- I don't care.
             }
-        } else if(requestCode == this.requestCode2){
+        } else if(requestCode == this.REQUEST_CODE_LOGIN){
             if(resultCode == Activity.RESULT_OK){
                 currentAccount = data.getStringExtra("username");
                 Toast.makeText(MapsActivity.this, "Logged in",
@@ -219,7 +219,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result -- I don't care.
             }
-        } else if(requestCode == this.requestCode3){
+        } else if(requestCode == this.REQUEST_CODE_EVENT_INFO){
             if(resultCode == Activity.RESULT_OK){
                 String toDelete = data.getStringExtra("delete");
                 if(toDelete.equals("true")){
@@ -236,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result -- I don't care.
             }
-        } else if(requestCode == this.requestCode4){
+        } else if(requestCode == this.REQUEST_CODE_PROFILE){
             if(resultCode == Activity.RESULT_OK){
 
                 String logout = data.getStringExtra("logout");
@@ -250,7 +250,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (resultCode == Activity.RESULT_CANCELED) {
                 reloadEvents();
             }
-        } else if(requestCode == this.requestCode5){
+        } else if(requestCode == this.REQUEST_CODE_EVENTS_LIST){
             if(resultCode == Activity.RESULT_OK){
 
                 //find event with id of event chosen from list
@@ -465,7 +465,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             m.snippet("Date: "  + + ev.getMonth() + "/" + ev.getDay() + "/" + ev.getYear() + " at " + ev.getHour() +":" + minute +", CLICK ME for more info");
             //set icon to user's profile pic if they have one
             Bitmap b = getProfPic(ev.getUsername());
-            b = Bitmap.createScaledBitmap(b, ((int)mMap.getCameraPosition().zoom * 10), ((int)mMap.getCameraPosition().zoom * 10), false);
+            double width = (double)b.getWidth();
+            double height = (double)b.getHeight();
+            //make sure icons don't get too small
+            double zoom = mMap.getCameraPosition().zoom;
+//            if(zoom < 4){
+//                zoom = 4;
+//            }
+            if(width > height){
+
+//                b = Bitmap.createScaledBitmap(b, ((int)(zoom * 6.0 * (width/height))), ((int)zoom * 6), false);
+                b = Bitmap.createScaledBitmap(b, ((int)(70 * (width/height))), ((int)70), false);
+            } else {
+//                b = Bitmap.createScaledBitmap(b, ((int)zoom * 6), ((int)(zoom * 6.0 * (height/width))), false);
+                b = Bitmap.createScaledBitmap(b, ((int)70), ((int)(zoom * 70 * (height/width))), false);
+            }
             b = getCroppedBitmap(b);
             if(b != null) {
                 m.icon(BitmapDescriptorFactory.fromBitmap(b));
@@ -576,7 +590,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intent.putExtra("location", "Location: " + selected.getLocation().latitude + ", " + selected.getLocation().longitude);
             intent.putExtra("ID", selected.getIDNumber());
 
-            startActivityForResult(intent, requestCode3);
+            startActivityForResult(intent, REQUEST_CODE_EVENT_INFO);
         }
     }
 }
