@@ -94,7 +94,7 @@ public class loginActivity extends AppCompatActivity {
                 result = request.execute(url).get();
             }
             catch( Exception e ){
-                Log.d( "CONNECTION 1", e.getMessage());
+//                Log.d( "CONNECTION 1", e.getMessage());
             }
 
             if(result.equals("Success")){
@@ -113,7 +113,7 @@ public class loginActivity extends AppCompatActivity {
             } else {
 
                 username.setError("Bad Connection. Find Better Connection.");
-                Log.d("Result", result);
+//                Log.d("Result", result);
 
             }
 
@@ -180,7 +180,7 @@ public class loginActivity extends AppCompatActivity {
                 finish();
 
             } else {
-                Log.d("Result", "Bad Result: " + result);
+//                Log.d("Result", "Bad Result: " + result);
             }
 
         }
